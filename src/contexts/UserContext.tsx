@@ -24,7 +24,6 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
       //console.log('trying to log in', result);
       await AsyncStorage.setItem('token', result.token);
       setUser(result.user);
-//      navigate('/');
     } catch (e) {
       console.log((e as Error).message);
     }
@@ -34,7 +33,6 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
     try {
       await AsyncStorage.removeItem('token');
       setUser(null);
-//      navigate('/');
     } catch (e) {
       console.log((e as Error).message);
     }
