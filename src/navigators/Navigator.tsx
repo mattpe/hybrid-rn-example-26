@@ -4,6 +4,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../views/Home';
 import Profile from '../views/Profile';
 import Single from '../views/Single';
+import Login from '../views/Login';
+import {useUserContext} from '../hooks/ContextHooks';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -18,18 +20,26 @@ const TabNavigator = () => {
 };
 
 const StackNavigator = () => {
+  const {user} = useUserContext();
+
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Tabs"
-        component={TabNavigator}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Media File"
-        component={Single}
-        // options={{headerShown: false}}
-      />
+      {!user ? (
+        <Stack.Screen name="Login" component={Login} />
+      ) : (
+        <>
+          <Stack.Screen
+            name="Tabs"
+            component={TabNavigator}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Media File"
+            component={Single}
+            // options={{headerShown: false}}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 };

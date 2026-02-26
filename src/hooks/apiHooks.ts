@@ -98,6 +98,7 @@ const useAuthentication = () => {
       process.env.EXPO_PUBLIC_AUTH_API + '/auth/login',
       fetchOptions,
     );
+    console.log(loginResult);
     return loginResult;
   };
 
