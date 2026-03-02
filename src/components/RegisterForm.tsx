@@ -1,7 +1,10 @@
-import {Button, Text, TextInput, View} from 'react-native';
-import {RegisterCredentials} from '../types/LocalTypes';
 import {Controller, useForm} from 'react-hook-form';
 import {useUser} from '../hooks/apiHooks';
+import {RegisterCredentials} from '../types/LocalTypes';
+import {View} from 'react-native';
+import {Input} from './ui/input';
+import {Text} from './ui/text';
+import {Button} from './ui/button';
 
 const RegisterForm = () => {
   const {postRegister, getUsernameAvailable, getEmailAvailable} = useUser();
@@ -54,7 +57,7 @@ const RegisterForm = () => {
           },
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Username"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -66,14 +69,14 @@ const RegisterForm = () => {
         )}
         name="username"
       />
-      <Text>{errors.username?.message}</Text>
+      <Text className="text-red-600">{errors.username?.message}</Text>
       <Controller
         control={control}
         rules={{
           required: {value: true, message: 'email is required'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -85,7 +88,7 @@ const RegisterForm = () => {
         )}
         name="email"
       />
-      <Text>{errors.email?.message}</Text>
+      <Text className="text-red-600">{errors.email?.message}</Text>
 
       <Controller
         control={control}
@@ -94,7 +97,7 @@ const RegisterForm = () => {
           required: {value: true, message: 'password is required'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="password"
             secureTextEntry
             onBlur={onBlur}
@@ -106,7 +109,7 @@ const RegisterForm = () => {
         )}
         name="password"
       />
-      <Text>{errors.password?.message}</Text>
+      <Text className="text-red-600">{errors.password?.message}</Text>
 
       <Controller
         control={control}
@@ -117,7 +120,7 @@ const RegisterForm = () => {
             getValues().password === value ? true : 'passwords must match',
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="confirm password"
             secureTextEntry
             onBlur={onBlur}
@@ -127,8 +130,10 @@ const RegisterForm = () => {
         )}
         name="confirm_password"
       />
-      <Text>{errors.confirm_password?.message}</Text>
-      <Button title="Register" onPress={handleSubmit(doRegister)} />
+      <Text className="text-red-600">{errors.confirm_password?.message}</Text>
+      <Button onPress={handleSubmit(doRegister)}>
+        <Text>Register</Text>
+      </Button>
     </View>
   );
 };

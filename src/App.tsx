@@ -1,30 +1,29 @@
 import {StatusBar} from 'expo-status-bar';
-import {StyleSheet} from 'react-native';
+import {View} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Navigator from './navigators/Navigator';
 import {UserProvider} from './contexts/UserContext';
+import {PortalHost} from '@rn-primitives/portal';
 
 const App = () => {
   //console.log('First app version working!!');
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <UserProvider>
-          <Navigator />
-        </UserProvider>
-        <StatusBar style="auto" />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaProvider>
+        <View className="flex-1">
+          <SafeAreaView className="flex-1 bg-white">
+            <UserProvider>
+              <Navigator />
+            </UserProvider>
+            <StatusBar style="auto" />
+          </SafeAreaView>
+
+          <PortalHost />
+        </View>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    //alignItems: 'center',
-    //justifyContent: 'center',
-  },
-});
 
 export default App;

@@ -4,15 +4,36 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../views/Home';
 import Profile from '../views/Profile';
 import Single from '../views/Single';
+import ImageZoom from '../views/ImageZoom';
+import VideoViewScreen from '../views/VideoViewScreen';
 import Login from '../views/Login';
+import MyFiles from '../views/MyFiles';
 import {useUserContext} from '../hooks/ContextHooks';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName: keyof typeof Ionicons.glyphMap = 'skull';
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'My Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'gray',
+      })}
+    >
       <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
       <Tab.Screen name="My Profile" component={Profile} />
     </Tab.Navigator>
@@ -29,7 +50,7 @@ const StackNavigator = () => {
       ) : (
         <>
           <Stack.Screen
-            name="Tabs"
+            name="Back"
             component={TabNavigator}
             options={{headerShown: false}}
           />
@@ -38,6 +59,17 @@ const StackNavigator = () => {
             component={Single}
             // options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="Image Zoom"
+            component={ImageZoom}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Video View"
+            component={VideoViewScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="My Files" component={MyFiles} />
         </>
       )}
     </Stack.Navigator>

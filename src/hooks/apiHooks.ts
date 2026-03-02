@@ -17,10 +17,14 @@ import type {
   UserResponse,
 } from 'hybrid-types/MessageTypes';
 
-const useMedia = () => {
+const useMedia = (fetchAllOnMount = true) => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
 
   useEffect(() => {
+    if (!fetchAllOnMount) {
+      return;
+    }
+
     const getMedia = async () => {
       try {
         const media = await fetchData<MediaItem[]>(
@@ -54,7 +58,32 @@ const useMedia = () => {
     };
 
     getMedia();
-  }, []);
+  }, [fetchAllOnMount]);
+
+  const getUserMediaByToken = async (token: string, username = 'me') => {
+    try {
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      };
+      const media = await fetchData<MediaItem[]>(
+        process.env.EXPO_PUBLIC_MEDIA_API + '/media/bytoken',
+        options,
+      );
+
+      const mediaWithOwner: MediaItemWithOwner[] = media.map((item) => ({
+        ...item,
+        username,
+      }));
+
+      return mediaWithOwner;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
 
   const postMedia = async (
     file: UploadResponse,
@@ -82,7 +111,7 @@ const useMedia = () => {
     );
   };
 
-  return {mediaArray, postMedia};
+  return {mediaArray, postMedia, getUserMediaByToken};
 };
 
 const useAuthentication = () => {

@@ -1,7 +1,10 @@
 import {Controller, useForm} from 'react-hook-form';
 import {useUserContext} from '../hooks/ContextHooks';
 import {Credentials} from '../types/LocalTypes';
-import {Button, Text, TextInput, View} from 'react-native';
+import {View} from 'react-native';
+import {Input} from './ui/input';
+import {Text} from './ui/text';
+import {Button} from './ui/button';
 
 const LoginForm = () => {
   const {handleLogin} = useUserContext();
@@ -26,7 +29,7 @@ const LoginForm = () => {
           required: {value: true, message: 'username is required'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Username"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -38,7 +41,7 @@ const LoginForm = () => {
         )}
         name="username"
       />
-      <Text>{errors.username?.message}</Text>
+      <Text className="text-red-600">{errors.username?.message}</Text>
 
       <Controller
         control={control}
@@ -47,7 +50,7 @@ const LoginForm = () => {
           required: {value: true, message: 'password is required'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="password"
             secureTextEntry
             onBlur={onBlur}
@@ -59,8 +62,10 @@ const LoginForm = () => {
         )}
         name="password"
       />
-      <Text>{errors.password?.message}</Text>
-      <Button title="Login" onPress={handleSubmit(doLogin)} />
+      <Text className="text-red-600">{errors.password?.message}</Text>
+      <Button onPress={handleSubmit(doLogin)}>
+        <Text>Login</Text>
+      </Button>
     </View>
   );
 };
