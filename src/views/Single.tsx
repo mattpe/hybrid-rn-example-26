@@ -1,5 +1,5 @@
 import {MediaItemWithOwner} from 'hybrid-types';
-import {Image, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {useVideoPlayer, VideoView} from 'expo-video';
 import {
   Card,
@@ -29,7 +29,7 @@ const Single = ({route}: any) => {
         <CardContent className="gap-4">
           <View className="rounded-2xl overflow-hidden bg-black">
             {item.media_type.split('/')[0] === 'video' ? (
-              <VideoView className="h-[320px] w-full" player={videoPlayer} />
+              <VideoView style={styles.media} player={videoPlayer} />
             ) : (
               <Image
                 className="h-[320px] w-full"
@@ -57,5 +57,12 @@ const Single = ({route}: any) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  media: {
+    height: 320,
+    width: '100%',
+  },
+});
 
 export default Single;
