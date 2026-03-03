@@ -1,5 +1,5 @@
 import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import Navigator from './navigators/Navigator';
 import {UserProvider} from './contexts/UserContext';
@@ -10,7 +10,7 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <View className="flex-1">
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView className="flex-1">
           <UserProvider>
             <Navigator />
           </UserProvider>
@@ -21,14 +21,5 @@ const App = () => {
     </SafeAreaProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    //alignItems: 'center',
-    //justifyContent: 'center',
-  },
-});
 
 export default App;

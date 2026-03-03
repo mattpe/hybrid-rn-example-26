@@ -1,7 +1,10 @@
-import {Button, Text, TextInput, View} from 'react-native';
+import {View} from 'react-native';
 import {RegisterCredentials} from '../types/LocalTypes';
 import {Controller, useForm} from 'react-hook-form';
 import {useUser} from '../hooks/apiHooks';
+import {Input} from './ui/input';
+import {Text} from './ui/text';
+import {Button} from './ui/button';
 
 const RegisterForm = () => {
   const {postRegister, getUsernameAvailable, getEmailAvailable} = useUser();
@@ -54,7 +57,7 @@ const RegisterForm = () => {
           },
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Username"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -73,7 +76,7 @@ const RegisterForm = () => {
           required: {value: true, message: 'email is required'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Email"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -94,7 +97,7 @@ const RegisterForm = () => {
           required: {value: true, message: 'password is required'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="password"
             secureTextEntry
             onBlur={onBlur}
@@ -117,7 +120,7 @@ const RegisterForm = () => {
             getValues().password === value ? true : 'passwords must match',
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="confirm password"
             secureTextEntry
             onBlur={onBlur}
@@ -128,7 +131,9 @@ const RegisterForm = () => {
         name="confirm_password"
       />
       <Text>{errors.confirm_password?.message}</Text>
-      <Button title="Register" onPress={handleSubmit(doRegister)} />
+      <Button onPress={handleSubmit(doRegister)}>
+        <Text>Register</Text>
+      </Button>
     </View>
   );
 };

@@ -1,6 +1,15 @@
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 import {MediaItemWithOwner} from 'hybrid-types';
-import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Image, Pressable, Text} from 'react-native';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
+import {useState} from 'react';
 
 const MediaListItem = ({
   item,
@@ -9,32 +18,38 @@ const MediaListItem = ({
   item: MediaItemWithOwner;
   navigation: NavigationProp<ParamListBase>;
 }) => {
+  const [pressed, setPressed] = useState(false);
+
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        console.log('touched ' + item.title);
-        navigation.navigate('Media File', {item});
-      }}
+    <Pressable
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      onPress={() => navigation.navigate('Media File', {item})}
+      className={pressed ? 'opacity-80' : 'opacity-100'}
     >
-      <Text className=" bg-red-500 m-4">{item.title}</Text>
-      <Image style={styles.image} source={{uri: item.thumbnail}} />
-      <Text>{item.description}</Text>
-      <Text>
-        Created at: {new Date(item.created_at).toLocaleString('fi-FI')}
-      </Text>
-      <Text>Filesize: {(item.filesize / 1024 / 1024).toFixed(2)} MB</Text>
-      <Text>Mime-type: {item.media_type}</Text>
-      <Text>Owner: {item.username}</Text>
-      {/* TODO = HOMEWORK: add all other media data and style your list & listitems */}
-    </TouchableOpacity>
+      <Card className=" overflow-hidden py-4">
+        <CardHeader>
+          <CardTitle>{item.title}</CardTitle>
+          <CardDescription>Owner: {item.username}</CardDescription>
+        </CardHeader>
+
+        <CardContent className="gap-2">
+          <Image
+            className="h-[220px] w-full rounded"
+            source={{uri: item.thumbnail}}
+          />
+        </CardContent>
+
+        <CardFooter className="flex-col items-start gap-1">
+          <Text>
+            Created at: {new Date(item.created_at).toLocaleString('fi-FI')}
+          </Text>
+          <Text>Filesize: {(item.filesize / 1024 / 1024).toFixed(2)} MB</Text>
+          <Text>Mime-type: {item.media_type}</Text>
+        </CardFooter>
+      </Card>
+    </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {marginTop: 5, marginBottom: 5, backgroundColor: '#f5c668'},
-  title: {fontSize: 20},
-  image: {height: 300},
-});
 
 export default MediaListItem;
