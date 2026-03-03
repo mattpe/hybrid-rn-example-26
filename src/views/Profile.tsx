@@ -1,5 +1,7 @@
-import {Button, Text, View} from 'react-native';
+import {View} from 'react-native';
 import {useUserContext} from '../hooks/ContextHooks';
+import {Text} from '@/components/ui/text';
+import {Button} from '@/components/ui/button';
 
 const Profile = () => {
   const {user, handleLogout} = useUserContext();
@@ -8,7 +10,9 @@ const Profile = () => {
     <View>
       <Text>{user?.username}</Text>
       {/* TODO: Add user details = HOMEWORK */}
-      <Button title="Logout" onPress={handleLogout} />
+      <Button onPress={handleLogout}>
+        <Text>Logout</Text>
+      </Button>
     </View>
   );
 };

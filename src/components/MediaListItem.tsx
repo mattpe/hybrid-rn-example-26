@@ -17,7 +17,7 @@ const MediaListItem = ({
         navigation.navigate('Media File', {item});
       }}
     >
-      <Text style={styles.title}>{item.title}</Text>
+      <Text className=" bg-red-500 m-4">{item.title}</Text>
       <Image style={styles.image} source={{uri: item.thumbnail}} />
       <Text>{item.description}</Text>
       <Text>
