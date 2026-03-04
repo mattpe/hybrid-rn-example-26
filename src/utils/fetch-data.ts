@@ -1,8 +1,9 @@
 import type {ErrorResponse} from 'hybrid-types/MessageTypes';
+import {fetch, FetchRequestInit} from 'expo/fetch';
 
 const fetchData = async <T>(
   url: string,
-  options: RequestInit = {},
+  options: FetchRequestInit = {},
 ): Promise<T> => {
   // console.log('fetching data from url: ', url);
   const response = await fetch(url, options);

@@ -17,8 +17,7 @@ import type {
   UserResponse,
 } from 'hybrid-types/MessageTypes';
 
-import {fetch} from 'expo/fetch';
-import {File, Paths} from 'expo-file-system';
+import {File} from 'expo-file-system';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
@@ -173,33 +172,6 @@ const useFile = () => {
       process.env.EXPO_PUBLIC_UPLOAD_API + '/upload',
       options,
     );
-  };
-
-  const postExpoFile = async (
-    imageUri: string,
-    token: string,
-  ): Promise<UploadResponse> => {
-    // TODO: display loading indicator
-    const formData = new FormData();
-    const file = new File(imageUri);
-
-    formData.append('file', file);
-
-    const response = await fetch(
-      process.env.EXPO_PUBLIC_UPLOAD_API + '/upload',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-        body: formData,
-      },
-    );
-
-    const fileResult = await response.json();
-
-    // TODO: hide loading indicator
-    return fileResult;
   };
 
   return {postFile};

@@ -8,6 +8,9 @@ import {Button} from '@/components/ui/button';
 import {Textarea} from '@/components/ui/textarea';
 import {Separator} from '@/components/ui/separator';
 import {useState} from 'react';
+import {useFile, useMedia} from '@/hooks/apiHooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {File} from 'expo-file-system';
 
 type UploadInputs = {
   title: string;
@@ -19,6 +22,9 @@ const Upload = () => {
     null,
   );
   const {user} = useUserContext();
+  const {postFile} = useFile();
+  const {postMedia} = useMedia();
+
   const initValues: UploadInputs = {title: '', description: ''};
   const {
     control,
@@ -30,6 +36,19 @@ const Upload = () => {
 
   const doUpload = async (inputs: UploadInputs) => {
     console.log(inputs);
+    if (!image || !image.assets) {
+      return;
+    }
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        return;
+      }
+      const file = new File(image.assets[0].uri);
+      const fileResponse = await postFile(file, token);
+      const mediaResponse = await postMedia(fileResponse, inputs, token);
+      console.log('mediaResponse', mediaResponse);
+    } catch (error) {}
   };
 
   const pickImage = async () => {
