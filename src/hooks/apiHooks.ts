@@ -18,12 +18,17 @@ import type {
 } from 'hybrid-types/MessageTypes';
 
 import {File} from 'expo-file-system';
+import {useUpdateContext} from './ContextHooks';
 
-const useMedia = () => {
+const useMedia = (instance = false) => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
+  const {update} = useUpdateContext();
 
   useEffect(() => {
     const getMedia = async () => {
+      if (!instance) {
+        return;
+      }
       try {
         const media = await fetchData<MediaItem[]>(
           process.env.EXPO_PUBLIC_MEDIA_API + '/media',
@@ -49,14 +54,13 @@ const useMedia = () => {
           }),
         );
         setMediaArray(mediaWithOwners);
-        //console.log(mediaWithOwners);
       } catch (error) {
         console.error(error);
       }
     };
 
     getMedia();
-  }, []);
+  }, [update]);
 
   const postMedia = async (
     file: UploadResponse,
@@ -100,7 +104,7 @@ const useAuthentication = () => {
       process.env.EXPO_PUBLIC_AUTH_API + '/auth/login',
       fetchOptions,
     );
-    console.log(loginResult);
+    // console.log(loginResult);
     return loginResult;
   };
 

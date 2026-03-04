@@ -1,5 +1,5 @@
 import {Controller, useForm} from 'react-hook-form';
-import {useUserContext} from '../hooks/ContextHooks';
+import {useUpdateContext, useUserContext} from '../hooks/ContextHooks';
 import * as ImagePicker from 'expo-image-picker';
 import {Image, Pressable, View} from 'react-native';
 import {Input} from '@/components/ui/input';
@@ -11,6 +11,11 @@ import {useState} from 'react';
 import {useFile, useMedia} from '@/hooks/apiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {File} from 'expo-file-system';
+import {
+  NavigationProp,
+  ParamListBase,
+  useNavigation,
+} from '@react-navigation/native';
 
 type UploadInputs = {
   title: string;
@@ -24,6 +29,8 @@ const Upload = () => {
   const {user} = useUserContext();
   const {postFile} = useFile();
   const {postMedia} = useMedia();
+  const navigation: NavigationProp<ParamListBase> = useNavigation();
+  const {triggerUpdate} = useUpdateContext();
 
   const initValues: UploadInputs = {title: '', description: ''};
   const {
@@ -48,6 +55,8 @@ const Upload = () => {
       const fileResponse = await postFile(file, token);
       const mediaResponse = await postMedia(fileResponse, inputs, token);
       console.log('mediaResponse', mediaResponse);
+      navigation.navigate('Home');
+      triggerUpdate();
     } catch (error) {}
   };
 

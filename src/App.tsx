@@ -4,6 +4,7 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import Navigator from './navigators/Navigator';
 import {UserProvider} from './contexts/UserContext';
 import {PortalHost} from '@rn-primitives/portal';
+import {UpdateProvider} from './contexts/UpdateContext';
 
 const App = () => {
   //console.log('First app version working!!');
@@ -11,9 +12,11 @@ const App = () => {
     <SafeAreaProvider>
       <View className="flex-1">
         <SafeAreaView className="flex-1">
-          <UserProvider>
-            <Navigator />
-          </UserProvider>
+          <UpdateProvider>
+            <UserProvider>
+              <Navigator />
+            </UserProvider>
+          </UpdateProvider>
           <StatusBar style="auto" />
         </SafeAreaView>
         <PortalHost />
