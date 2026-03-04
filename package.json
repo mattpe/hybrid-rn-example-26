@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "expo": "~54.0.33",
+    "expo-image-picker": "~17.0.10",
     "expo-status-bar": "~3.0.9",
     "expo-video": "~3.0.16",
     "hybrid-types": "github:ilkkamtk/hybrid-types",
