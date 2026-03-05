@@ -158,6 +158,7 @@ const useUser = () => {
 };
 
 const useFile = () => {
+  const [loading, setLoading] = useState(false);
   const postFile = async (file: File, token: string) => {
     // create FormData object
     const formData = new FormData();
@@ -172,13 +173,14 @@ const useFile = () => {
       },
       body: formData,
     };
-    return fetchData<UploadResponse>(
+    const result = await fetchData<UploadResponse>(
       process.env.EXPO_PUBLIC_UPLOAD_API + '/upload',
       options,
     );
+    return result;
   };
 
-  return {postFile};
+  return {postFile, loading, setLoading};
 };
 
 const useLike = () => {

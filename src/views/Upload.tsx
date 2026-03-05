@@ -1,7 +1,7 @@
 import {Controller, useForm} from 'react-hook-form';
 import {useUpdateContext, useUserContext} from '../hooks/ContextHooks';
 import * as ImagePicker from 'expo-image-picker';
-import {Image, Pressable, View} from 'react-native';
+import {ActivityIndicator, Image, Pressable, View} from 'react-native';
 import {Input} from '@/components/ui/input';
 import {Text} from '@/components/ui/text';
 import {Button} from '@/components/ui/button';
@@ -27,7 +27,7 @@ const Upload = () => {
     null,
   );
   const {user} = useUserContext();
-  const {postFile} = useFile();
+  const {postFile, loading, setLoading} = useFile();
   const {postMedia} = useMedia();
   const navigation: NavigationProp<ParamListBase> = useNavigation();
   const {triggerUpdate} = useUpdateContext();
@@ -42,11 +42,11 @@ const Upload = () => {
   });
 
   const doUpload = async (inputs: UploadInputs) => {
-    console.log(inputs);
     if (!image || !image.assets) {
       return;
     }
     try {
+      setLoading(true);
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         return;
@@ -54,10 +54,12 @@ const Upload = () => {
       const file = new File(image.assets[0].uri);
       const fileResponse = await postFile(file, token);
       const mediaResponse = await postMedia(fileResponse, inputs, token);
-      console.log('mediaResponse', mediaResponse);
       navigation.navigate('Home');
       triggerUpdate();
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   const pickImage = async () => {
@@ -120,7 +122,11 @@ const Upload = () => {
       </Pressable>
 
       <Button onPress={handleSubmit(doUpload)}>
-        <Text>Upload</Text>
+        {loading ? (
+          <ActivityIndicator className=" text-white" />
+        ) : (
+          <Text>Upload</Text>
+        )}
       </Button>
     </View>
   );
