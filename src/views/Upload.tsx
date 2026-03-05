@@ -7,7 +7,7 @@ import {Text} from '@/components/ui/text';
 import {Button} from '@/components/ui/button';
 import {Textarea} from '@/components/ui/textarea';
 import {Separator} from '@/components/ui/separator';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useFile, useMedia} from '@/hooks/apiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {File} from 'expo-file-system';
@@ -37,9 +37,15 @@ const Upload = () => {
     control,
     handleSubmit,
     formState: {errors},
+    reset,
   } = useForm({
     defaultValues: initValues,
   });
+
+  const resetForm = () => {
+    reset(initValues);
+    setImage(null);
+  };
 
   const doUpload = async (inputs: UploadInputs) => {
     if (!image || !image.assets) {
@@ -75,6 +81,13 @@ const Upload = () => {
       setImage(result);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      resetForm();
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <View className="p-4">
@@ -121,12 +134,16 @@ const Upload = () => {
         />
       </Pressable>
 
-      <Button onPress={handleSubmit(doUpload)}>
+      <Button onPress={handleSubmit(doUpload)} disabled={image ? false : true}>
         {loading ? (
           <ActivityIndicator className=" text-white" />
         ) : (
           <Text>Upload</Text>
         )}
+      </Button>
+      <Separator className="my-2" />
+      <Button onPress={resetForm} variant="outline">
+        <Text>Reset</Text>
       </Button>
     </View>
   );
