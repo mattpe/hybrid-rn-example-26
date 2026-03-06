@@ -278,4 +278,39 @@ const useComment = () => {
   return {postComment, getCommentsByMediaId};
 };
 
-export {useMedia, useAuthentication, useUser, useFile, useLike, useComment};
+const useTag = () => {
+  const postTag = async (media_id: number, tag_name: string, token: string) => {
+    // Send a POST request to /tags with the tag object and the token in the Authorization header.
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify({media_id, tag_name}),
+    };
+    return fetchData<MessageResponse>(
+      process.env.EXPO_PUBLIC_MEDIA_API + '/tags',
+      fetchOptions,
+    );
+  };
+
+  const getMediaByTagName = async (tag_name: string) => {
+    // Send a GET request to /tags/:tag_name to get the media items with the tag.
+    return await fetchData<MediaItem[]>(
+      process.env.EXPO_PUBLIC_MEDIA_API + '/tags/' + tag_name,
+    );
+  };
+
+  return {postTag, getMediaByTagName};
+};
+
+export {
+  useMedia,
+  useAuthentication,
+  useUser,
+  useFile,
+  useLike,
+  useComment,
+  useTag,
+};

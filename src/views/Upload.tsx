@@ -1,5 +1,5 @@
 import {Controller, useForm} from 'react-hook-form';
-import {useUpdateContext, useUserContext} from '../hooks/ContextHooks';
+import {useUpdateContext} from '../hooks/ContextHooks';
 import * as ImagePicker from 'expo-image-picker';
 import {ActivityIndicator, Image, Pressable, View} from 'react-native';
 import {Input} from '@/components/ui/input';
@@ -8,7 +8,7 @@ import {Button} from '@/components/ui/button';
 import {Textarea} from '@/components/ui/textarea';
 import {Separator} from '@/components/ui/separator';
 import {useEffect, useState} from 'react';
-import {useFile, useMedia} from '@/hooks/apiHooks';
+import {useFile, useMedia, useTag} from '@/hooks/apiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {File} from 'expo-file-system';
 import {
@@ -26,11 +26,12 @@ const Upload = () => {
   const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(
     null,
   );
-  const {user} = useUserContext();
   const {postFile, loading, setLoading} = useFile();
   const {postMedia} = useMedia();
   const navigation: NavigationProp<ParamListBase> = useNavigation();
   const {triggerUpdate} = useUpdateContext();
+  const {postTag} = useTag();
+  const appName = 'defrtyhjuiklo';
 
   const initValues: UploadInputs = {title: '', description: ''};
   const {
@@ -60,9 +61,11 @@ const Upload = () => {
       const file = new File(image.assets[0].uri);
       const fileResponse = await postFile(file, token);
       const mediaResponse = await postMedia(fileResponse, inputs, token);
+      await postTag(mediaResponse.media.media_id, appName, token);
       navigation.navigate('Home');
       triggerUpdate();
     } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
