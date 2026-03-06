@@ -23,6 +23,7 @@ import {useUpdateContext} from './ContextHooks';
 const useMedia = (instance = false) => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
   const {update} = useUpdateContext();
+  // const {getMediaByTagName} = useTag();
 
   useEffect(() => {
     const getMedia = async () => {
@@ -33,6 +34,9 @@ const useMedia = (instance = false) => {
         const media = await fetchData<MediaItem[]>(
           process.env.EXPO_PUBLIC_MEDIA_API + '/media',
         );
+
+        // const media = await getMediaByTagName('defrtyhjuiklo');
+
         const mediaWithOwners = await Promise.all<MediaItemWithOwner>(
           media.map(async (item) => {
             try {
