@@ -11,9 +11,16 @@ import {
 import {Separator} from '@/components/ui/separator';
 import {Text} from '@/components/ui/text';
 import {useUserContext} from '../hooks/ContextHooks';
+import {
+  NavigationProp,
+  ParamListBase,
+  useNavigation,
+} from '@react-navigation/native';
 
 const Profile = () => {
   const {user, handleLogout} = useUserContext();
+  const navigation: NavigationProp<ParamListBase> = useNavigation();
+
   const username = user?.username ?? 'Profile';
   const email = user?.email ?? 'Sign in to view your account details.';
   const summary = user
@@ -23,7 +30,7 @@ const Profile = () => {
   return (
     <View className="flex-1 bg-muted/30 px-4 py-8">
       <ScrollView className="w-full max-w-sm self-center">
-        <Card className="overflow-hidden py-0">
+        <Card>
           <Image
             source={require('../../assets/icon.png')}
             className="w-full bg-muted h-[220px]"
@@ -45,7 +52,17 @@ const Profile = () => {
 
           <Separator />
 
-          <CardFooter className="py-6">
+          <CardFooter className="py-6 flex-col">
+            <Button
+              className="w-full rounded-xl"
+              size="lg"
+              onPress={() => navigation.navigate('My Files')}
+            >
+              <Text>My Files</Text>
+            </Button>
+
+            <Separator className="my-4" />
+
             <Button
               className="w-full rounded-xl"
               size="lg"

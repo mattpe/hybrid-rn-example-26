@@ -19,8 +19,9 @@ import type {
 
 import {File} from 'expo-file-system';
 import {useUpdateContext} from './ContextHooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const useMedia = (instance = false) => {
+const useMedia = (instance = false, ownFiles = false) => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
   const {update} = useUpdateContext();
   // const {getMediaByTagName} = useTag();
@@ -31,8 +32,18 @@ const useMedia = (instance = false) => {
         return;
       }
       try {
+        const endpoint = ownFiles ? '/media/bytoken' : '/media';
+
+        const options = {
+          method: 'GET',
+          headers: {
+            Authorization: 'Bearer ' + (await AsyncStorage.getItem('token')),
+          },
+        };
+
         const media = await fetchData<MediaItem[]>(
-          process.env.EXPO_PUBLIC_MEDIA_API + '/media',
+          process.env.EXPO_PUBLIC_MEDIA_API + endpoint,
+          options,
         );
 
         // const media = await getMediaByTagName('defrtyhjuiklo');

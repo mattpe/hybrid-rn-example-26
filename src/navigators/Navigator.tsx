@@ -8,6 +8,7 @@ import Login from '../views/Login';
 import {useUserContext} from '../hooks/ContextHooks';
 import Upload from '@/views/Upload';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MyFiles from '@/views/MyFiles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -51,7 +52,7 @@ const StackNavigator = () => {
       ) : (
         <>
           <Stack.Screen
-            name="Tabs"
+            name="Back"
             component={TabNavigator}
             options={{headerShown: false}}
           />
@@ -60,6 +61,7 @@ const StackNavigator = () => {
             component={Single}
             // options={{headerShown: false}}
           />
+          <Stack.Screen name="My Files" component={MyFiles} />
         </>
       )}
     </Stack.Navigator>
