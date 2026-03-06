@@ -1,7 +1,13 @@
 import {Controller, useForm} from 'react-hook-form';
 import {useUpdateContext} from '../hooks/ContextHooks';
 import * as ImagePicker from 'expo-image-picker';
-import {ActivityIndicator, Image, Pressable, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {Input} from '@/components/ui/input';
 import {Text} from '@/components/ui/text';
 import {Button} from '@/components/ui/button';
@@ -16,6 +22,7 @@ import {
   ParamListBase,
   useNavigation,
 } from '@react-navigation/native';
+import {useVideoPlayer, VideoView} from 'expo-video';
 
 type UploadInputs = {
   title: string;
@@ -28,6 +35,13 @@ const Upload = () => {
   );
   const {postFile, loading, setLoading} = useFile();
   const {postMedia} = useMedia();
+  const videoPlayer = useVideoPlayer(
+    image && image.assets && image.assets[0].uri,
+    (player) => {
+      player.loop = true;
+      player.play();
+    },
+  );
   const navigation: NavigationProp<ParamListBase> = useNavigation();
   const {triggerUpdate} = useUpdateContext();
   const {postTag} = useTag();
@@ -131,10 +145,14 @@ const Upload = () => {
       <Text>{errors.description?.message}</Text>
       <Separator className="py-2" />
       <Pressable onPress={pickImage}>
-        <Image
-          source={{uri: image && image.assets ? image.assets[0].uri : ''}}
-          className="h-[220px] w-full"
-        />
+        {image && image.assets && image.assets[0].type === 'video' ? (
+          <VideoView player={videoPlayer} style={styles.media} />
+        ) : (
+          <Image
+            source={{uri: image && image.assets ? image.assets[0].uri : ''}}
+            className="h-[220px] w-full"
+          />
+        )}
       </Pressable>
 
       <Button onPress={handleSubmit(doUpload)} disabled={image ? false : true}>
@@ -151,5 +169,12 @@ const Upload = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  media: {
+    height: 220,
+    width: '100%',
+  },
+});
 
 export default Upload;
